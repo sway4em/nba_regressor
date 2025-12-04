@@ -11,7 +11,7 @@ We first searched to find a suitable dataset for our use. After exploring a numb
 Our dataset ended up having over 9700 player-seasons over 28 years, with around 375 unique players on average per season. We explored a number of different features and combinations of feature sets to create our ideal dataset. However, there existed a significant class imbalance within our dataset, with a ratio of 5.29:1 non-breakout seasons to breakout seasons, with a rate of 15.9% (1551 breakouts / 9752 player-seasons total). Although the dataset isn’t huge, especially for breakout seasons, we thought we could create a differentiating dataset, which we initially labelled by measuring player stat differences from one season to the next. Initially, we labelled breakout players as having a 1 standard deviation change in their stats from the previous season, but later changed this to measure the change in the player’s Effective Net Rating from season to season. We validated our results with Giannis Antetokounmpo, for which we correctly identified one of his breakout seasons in our backtesting. The change in Effective Net Rating we measured was a difference of 5 points from the previous season. For Giannis, for example, he had a \+8.2 point difference in his Effective Net Rating for his breakout season. For Tyrese Maxey in the 2022-2023 season, a \+7.1 point difference. Our 5 point threshold seemed to give us satisfactory results overall.
 
 	Diving deeper into our feature selection, the dataset we used had 50+ features that we could use to attempt to predict breakouts. To determine which features to use we needed to identify which ones would provide the best signal to the model. We did this by comparing the distribution of the values across the “No Breakout” versus “Breakout” classes. Here is an example:  
-(ClassDistributions.jpg)
+![](ClassDistributions.jpg)
 As you can see, a feature like E\_NET\_RATING\_PREV differs significantly between the two classes, whereas REB\_PREV did not. We predicted that this difference would provide a strong signal to the model so we selected only features with large differences between the two.  
 This led to our final model. We selected an XGBoost with the following features:   
 E\_NET\_RATING\_PREV, (previous season net rating)  
@@ -23,9 +23,9 @@ AGE, and EXPERIENCE (number of years playing in the NBA).
 (No current-season features to prevent data leakage)
 
 We validated our model by comparing across multiple seasons and generating confusion matrices and precision/recall stats. Here were those results:  
-(stats.jpg) 
+![](stats.jpg) 
 Here is an example of how our model worked on Giannis Antetokounmpo’s career:  
-(giannis.jpg) 
+![](giannis.jpg) 
 	As you can see it successfully predicted every season except for one. This includes predicting that he would have a breakout season in 2018 which is when he won the MVP award.
 
 	After examining our results, we were pretty satisfied with the performance of our model overall. Although correctly identifying players who will have a breakout season was not the model’s strongest suit, we largely expected that to be the result from the beginning, due to the widely-known imbalance in our dataset due to the rarity of players who do have a breakout season in comparison to ones who don’t. In the case of Giannis Antetokounmpo, two of the three seasons where our model predicted that he would have a breakout season ended up being Giannis’s two MVP seasons, which really goes to show how significant a breakout season is. 
